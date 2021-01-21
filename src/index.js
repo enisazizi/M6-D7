@@ -6,15 +6,32 @@ const cors = require("cors")
 
 const services = require("./services")
 
-server.use(express.json())
+
 
 
 
 server.use("/api",services)
+const {
+    notFoundErrorHandler,
+    unauthorizedErrorHandler,
+    forbiddenErrorHandler,
+    badRequestErrorHandler,
+    catchAllErrorHandler,
+  } = require("../errorHandlers")
 
+
+  const port = process.env.PORT || 4000
+
+
+server.use(express.json())
 server.use(cors())
 
-const port = process.env.PORT || 4000
+server.use(notFoundErrorHandler)
+server.use(unauthorizedErrorHandler)
+server.use(forbiddenErrorHandler)
+server.use(badRequestErrorHandler)
+server.use(catchAllErrorHandler)
+
 
 server.listen(port,()=>{
     console.info(' ✅  Server is running on port ' + port )

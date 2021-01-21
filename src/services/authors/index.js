@@ -2,55 +2,51 @@ const router = require("express").Router()
 
 const Model = require("../../utilis/model")
 
-const Articles = new Model('articles')
+const Author = new Model('authors')
+
 
 router.get("/",async(req,res,next)=>{
     try {
-        const response = await Articles.findOne()
+        const response = await Author.findOne()
         res.send(response)
     } catch (error) {
-        console.log(error)
-        res.status(500).send(error)
+       next(error)
     }
 })
 
 router.get("/:id",async(req,res,next)=>{
     try {
-        const {rows} = await Articles.findById(req.params.id)
+        const {rows} = await Author.findById(req.params.id)
         res.send(rows)
     } catch (error) {
-        console.log(error)
-        res.status(500).send(error)
+        next(error)
     }
 })
 
 router.post("/",async (req,res,next)=>{
     try {
-        const response = await Articles.save(req.body)
+        const response = await Author.save(req.body)
         res.status(201).send(response)
     } catch (error) {
-        console.log(error)
-        res.status(500).send(error.message)
+       next(error)
     }
 })
 
 router.put("/:id",async (req,res,next)=>{
     try {
-        const response = await Articles.findByIdAndUpdate(req.params.id,req.body)
+        const response = await Author.findByIdAndUpdate(req.params.id,req.body)
         res.send(response)
         
     } catch (error) {
-        console.log(error)
-        res.status(500).send(error)
+        next(error)
     }
 })
 router.delete("/:id",async (req,res,next)=>{
     try {
-        const response = await Articles.findByIdAndUpdate(req.params.id)
+        const response = await Author.findByIdAndUpdate(req.params.id)
         res.send(response)
     } catch (error) {
-        console.log(error)
-        res.status(500).send(error)
+        next(error)
     }
 })
 

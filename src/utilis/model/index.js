@@ -17,8 +17,9 @@ class Model {
         if(!id){
             throw new Error('Something happend with the ID')
         }
-        const query = `SELECT * FROM${this.name} where id= ${parseInt(id,10)}` 
+        const query = `SELECT * FROM ${this.name} where id= ${parseInt(id,10)}` 
         const response = await this.run(query)
+        console.log("asdasdasdadasda")
         return response
     }
     async findByIdAndDelete(id){
@@ -45,17 +46,27 @@ class Model {
             const response = await this.run(query)
             return response
 
-        }else{
+        }
+        // else if(fields.stupidWay){
+        //     const entries = Object.entries(fields)
+        //     const whereClause = `${entries.map(([column,value])=>`${column}='${value}'`).join(" OR ")}`
+        //     const query = `SELECT * FROM ${this.name} WHERE ${whereClause}`
+        //     console.log(whereClause,"12------21")
+        //     const response = await this.run(query)
+        //     return response
+        // }
+        else{
             const entries = Object.entries(fields)
-            const whereClause = `${entries.map(([column,value])=>`${column}='${value}'`).join(" AND ")}`
+            const whereClause = `${entries.map(([column,value])=>`${column}='${value}'`).join(" OR ")}`
             const query = `SELECT * FROM ${this.name} WHERE ${whereClause}`
+            console.log(whereClause,"12------21")
             const response = await this.run(query)
             return response
         }
     }
     async save(fields){
         if(!fields || Object.values(fields).length===0){
-            throw new Error ("somethings happend with the values ")
+            throw new Error ("check the fields that u send as a body ")
         }else{
             const columns = Object.keys(fields)
             const values = Object.values(fields)
@@ -64,7 +75,13 @@ class Model {
             return response
         }
     }
+    
 }
 
+//SELECT * FROM articles WHERE head_line = 'Article' OR content = 'write something'
+
+// SELECT a.head_line AS article_headline , ath.name AS author_name ,ath.lastname AS author_lastName,c.category_name AS category_name
+
+// FROM articles AS a INNER JOIN authors AS ath ON a.id = ath.id INNER JOIN categories AS c ON a.id=c.id
 module.exports = Model
 
